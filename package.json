@@ -1,0 +1,23 @@
+{
+  "name": "q-a-electron",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jirayuth289/Q-A-electron.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jirayuth289/Q-A-electron/issues"
+  },
+  "homepage": "https://github.com/jirayuth289/Q-A-electron#readme",
+  "devDependencies": {
+    "electron": "^17.0.1"
+  }
+}
