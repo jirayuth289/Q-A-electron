@@ -1,21 +1,23 @@
-const { app, BrowserWindow } = require('electron')
-let win;
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
 
+let win;
 function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1280,
+        height: 760,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'preload'),
         }
     })
 
     // and load the index.html of the app.
-    win.loadFile('src/index.html')
+    win.loadFile(path.join(__dirname, 'src', 'index.html'))
 
     // Open the DevTools.
-    // win.webContents.openDevTools()
+    // win.webContents.openDevTools();
 
     //Quit app when main BrowserWindow Instance is closed
     win.on('closed', function () {
@@ -23,10 +25,46 @@ function createWindow() {
     });
 }
 
+const openAnswerWindow = (event, questionId) => {
+    let answerWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        show: false,
+        webPreferences: {
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'src', 'preload-answer.js'),
+        },
+    });
+
+    // answerWindow.webContents.openDevTools();
+    answerWindow.loadFile(path.join(__dirname, 'src', 'answer.html'));
+
+    //Destroy the BrowserWindow Instance on close
+    answerWindow.on('close', function () {
+        answerWindow = null;
+    });
+
+    answerWindow.webContents.on('did-finish-load', () => {
+        if (!answerWindow) {
+            throw new Error('"answerWindow" is not defined');
+        }
+
+        answerWindow.show();
+        answerWindow.webContents.send('show-answer', questionId);
+    });
+
+    return { questionId }
+}
+
+
+
 // This method will be called when the Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+    createWindow();
+    ipcMain.handle('window:answer', openAnswerWindow)
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

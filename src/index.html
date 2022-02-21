@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Hello World!</title>
 
-    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="script-src 'self' 'unsafe-inline';"
-    />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <title>Q&A</title>
 
-  <body>
-    <h3>Aynschronous Message Sending</h3>
-    <div>
-      Value Received From Renderer Process -
-      <span id="value"></span>
-    </div>
-    <br />
-    <button id="new">Click Me to Open New Window</button>
+  <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  <style>
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+  </style>
+</head>
 
-    <script src="index.js"></script>
-  </body>
+<body>
+
+  <h2>Question & Answer</h2>
+  <p>for testing with electronjs</p>
+
+  <table id="question-table" style="width:100%">
+    <tr>
+      <th>Question</th>
+    </tr>
+  </table>
+
+  <script src="index.js"></script>
+</body>
+
 </html>

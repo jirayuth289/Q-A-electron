@@ -1,38 +1,40 @@
-const electron = require('electron')
-const path = require('path')
-// BrowserWindow Instance is a part of the Main Process,
-// To fetch its instance from the Main Process,
-// Use electron.remote
-const BrowserWindow = electron.remote.BrowserWindow
+const tableRef = document.getElementById('question-table');
 
-var update = document.getElementById('value');
-var button = document.getElementById('new');
+function addRow(question) {
+	// Insert a row at the end of the table
+	let newRow = tableRef.insertRow(-1);
 
-button.addEventListener('click', function (event) {
-	// Linking to new-window.html
-	const newPath = path.join('file://', __dirname, 'new-window.html');
-	let win = new BrowserWindow({
-		// To display the Default Frame of the Window
-		// consisting of default Menu
-		frame: true,
-		
-		// Makes the Renderer Window Sticky,
-		// Will always stay on top despite focus change
-		alwaysOnTop: true,
-		width: 600,
-		height: 400,
-		webPreferences: {
-			nodeIntegration: true
-		}
+	// Insert a cell in the row at index 0
+	let newCell = newRow.insertCell(0);
+
+	// Append a div node to the cell
+	const newText = document.createElement('div');
+	newText.innerText = question.question;
+	newText.id = question.id;
+
+	newText.addEventListener('click', (ev) => {
+		window.myApi.openAnswerWindow(ev.target.id);
 	});
 
-// Destroy the BrowserWindow Instance on close
-	win.on('close', function () {
-		win = null;
-	});
+	newCell.appendChild(newText);
+}
 
-	// win.webContents.openDevTools();
-	win.loadURL(newPath);
-	win.show();
+const questionList = [
+    {
+        id: 1,
+        question: 'question 1'
+    },
+    {
+        id: 2,
+        question: 'question 2'
+    },
+    {
+        id: 3,
+        question: 'question 3'
+    }
+]
+
+questionList.forEach((question) => {
+	addRow(question)
 });
 
