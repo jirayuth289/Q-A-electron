@@ -1,10 +1,12 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, net } = require('electron');
 const path = require('path');
 
-let win;
+const { getQuestionService, getAnswerByQuestionIdService } = require('./src/service')
+
+
 function createWindow() {
     // Create the browser window.
-    win = new BrowserWindow({
+    let win = new BrowserWindow({
         width: 1280,
         height: 760,
         webPreferences: {
@@ -44,26 +46,31 @@ const openAnswerWindow = (event, questionId) => {
         answerWindow = null;
     });
 
-    answerWindow.webContents.on('did-finish-load', () => {
+    answerWindow.webContents.on('did-finish-load', async () => {
         if (!answerWindow) {
             throw new Error('"answerWindow" is not defined');
         }
+        try {
+            const result = await getAnswerByQuestionIdService(questionId);
 
-        answerWindow.show();
-        answerWindow.webContents.send('show-answer', questionId);
+            answerWindow.show();
+            answerWindow.webContents.send('show-answer', result.answer);
+        } catch (error) {
+            throw error;
+        }
     });
 
     return { questionId }
 }
 
-
-
 // This method will be called when the Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
     createWindow();
-    ipcMain.handle('window:answer', openAnswerWindow)
+
+    ipcMain.handle('window:answer', openAnswerWindow);
+    ipcMain.handle('service:question', (ev) => getQuestionService())
 })
 
 // Quit when all windows are closed.

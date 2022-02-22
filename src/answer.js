@@ -15,7 +15,6 @@ const answerList = [
     answer: "answer 3"
   },
 ]
-window.answerApi.handleAnswer((event, questionId) => {
-  const answer = answerList.find(item => item.questionId == questionId);
+window.answerApi.handleAnswer((event, answer) => {
   questionRef.innerText = answer.answer;
 })

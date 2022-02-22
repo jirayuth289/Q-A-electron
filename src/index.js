@@ -19,22 +19,11 @@ function addRow(question) {
 	newCell.appendChild(newText);
 }
 
-const questionList = [
-    {
-        id: 1,
-        question: 'question 1'
-    },
-    {
-        id: 2,
-        question: 'question 2'
-    },
-    {
-        id: 3,
-        question: 'question 3'
-    }
-]
-
-questionList.forEach((question) => {
-	addRow(question)
-});
+window.myApi.getQuestion().then((response) => {
+	response.rows.forEach((question) => {
+		addRow(question)
+	});
+}).catch((error) => {
+	throw error;
+})
 

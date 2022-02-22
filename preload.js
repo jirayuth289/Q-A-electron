@@ -4,12 +4,5 @@ contextBridge.exposeInMainWorld('myApi', {
     openAnswerWindow: async (questionId) => {
         const result = await ipcRenderer.invoke('window:answer', questionId);
     },
-   
+    getQuestion: () => ipcRenderer.invoke('service:question')
 });
-
-// window.addEventListener('DOMContentLoaded', () => {
-//   console.log('DOMContentLoaded');
-//     ipcRenderer.on('event', (_event, value) => {
-//       console.log('value:', value);       
-//     })
-// })
